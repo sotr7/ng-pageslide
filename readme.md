@@ -1,5 +1,42 @@
 # AngularJS Pageslide directive
 
+This fork made from 
+
+becouse of https://github.com/dpiccone/ng-pageslide/issues/66
+
+done:
+
+<------
+zekth commented on 16 Sep 2015
+Default overflow is hidden, which makes some issues with big forms.
+Just added theses lines:
+line 9:
+return {
+restrict: "EAC",
+transclude: false,
+scope: {
+psOpen: "=?",
+psAutoClose: "=?",
+psSide: "@",
+psSpeed: "@",
+psClass: "@",
+psSize: "@",
+psSqueeze: "@",
+psCloak: "@",
+psPush: "@",
+psContainer: "@",
+psOverflow: "@"
+}
+
+line 44: 
+param.overflow = $scope.psOverflow || 'hidden';
+
+line 75 
+slider.style.overflow = param.overflow;
+
+And in the html i can use this : ps-overflow="scroll"
+----->
+
 An [AngularJS](http://angularjs.org/) directive which slides another panel over your browser to reveal an additional interaction pane.
 
 It does all the css manipulation needed to position your content off canvas with html attibutes and it does not depend on jQuery
