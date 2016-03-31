@@ -14,13 +14,13 @@ angular.module('pageslide-directive', [])
                 psSpeed: '@',
                 psClass: '@',
                 psSize: '@',
-                psZindex: '@',
                 psSqueeze: '@',
                 psCloak: '@',
                 psPush: '@',
                 psContainer: '@',
                 psKeyListener: '@',
-                psBodyClass: '@'
+                psBodyClass: '@',
+                psOverflow: "@"
             },
             link: function ($scope, el, attrs) {
 
@@ -35,13 +35,15 @@ angular.module('pageslide-directive', [])
                 param.side = $scope.psSide || 'right';
                 param.speed = $scope.psSpeed || '0.5';
                 param.size = $scope.psSize || '300px';
-                param.zindex = $scope.psZindex || 1000;
+                param.zindex = 1000; // Override with custom CSS
                 param.className = $scope.psClass || 'ng-pageslide';
+                param.cloak = $scope.psCloak && $scope.psCloak.toLowerCase() == 'false' ? false : true;
                 param.squeeze = Boolean($scope.psSqueeze) || false;
                 param.push = Boolean($scope.psPush) || false;
                 param.container = $scope.psContainer || false;
                 param.keyListener = Boolean($scope.psKeyListener) || false;
                 param.bodyClass = $scope.psBodyClass || false;
+                param.overflow = $scope.psOverflow || 'hidden';
 
                 el.addClass(param.className);
 
@@ -85,6 +87,7 @@ angular.module('pageslide-directive', [])
                 slider.style.position = param.container !== false ? 'absolute' : 'fixed';
                 slider.style.width = 0;
                 slider.style.height = 0;
+                slider.style.overflow = param.overflow;
                 slider.style.transitionDuration = param.speed + 's';
                 slider.style.webkitTransitionDuration = param.speed + 's';
                 slider.style.transitionProperty = 'width, height';
@@ -127,7 +130,7 @@ angular.module('pageslide-directive', [])
                 /* Closed */
                 function psClose(slider, param) {
                     if (slider && slider.style.width !== 0) {
-                        content.css('display', 'none');
+                        if (param.cloak) content.css('display', 'none');
                         switch (param.side) {
                             case 'right':
                                 slider.style.width = '0px';
@@ -211,7 +214,7 @@ angular.module('pageslide-directive', [])
                         }
 
                         $timeout(function() {
-                            content.css('display', 'block');
+                            if (param.cloak) content.css('display', 'block');
                         }, (param.speed * 1000));
 
                         $scope.psOpen = true;
@@ -266,9 +269,7 @@ angular.module('pageslide-directive', [])
                 * */
 
                 $scope.$on('$destroy', function () {
-                    if (slider.parentNode === body) {
-                        body.removeChild(slider);
-                    }
+                    body.removeChild(slider);
                 });
 
                 if ($scope.psAutoClose) {
