@@ -1,6 +1,6 @@
 # AngularJS Pageslide directive
 
-This fork made from 
+This fork made from https://github.com/dpiccone/ng-pageslide
 
 becouse of https://github.com/dpiccone/ng-pageslide/issues/66
 
@@ -9,23 +9,41 @@ done:
 <------
 zekth commented on 16 Sep 2015
 Default overflow is hidden, which makes some issues with big forms.
+
 Just added theses lines:
+
 line 9:
+
 return {
+
 restrict: "EAC",
+
 transclude: false,
+
 scope: {
+
 psOpen: "=?",
+
 psAutoClose: "=?",
+
 psSide: "@",
+
 psSpeed: "@",
+
 psClass: "@",
+
 psSize: "@",
+
 psSqueeze: "@",
+
 psCloak: "@",
+
 psPush: "@",
+
 psContainer: "@",
+
 psOverflow: "@"
+
 }
 
 line 44: 
